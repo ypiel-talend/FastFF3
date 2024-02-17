@@ -11,10 +11,14 @@
   <url>https://github.com/ypiel-talend/FastFF3</url>
 
   <properties>
+    <maven.compiler.source>21</maven.compiler.source>
+    <maven.compiler.target>21</maven.compiler.target>
+    <!-- Dependencies version -->
     <junit-jupiter-engine.version>5.9.1</junit-jupiter-engine.version>
     <maven-surefire-plugin.version>2.22.2</maven-surefire-plugin.version>
     <javafx-maven-plugin.version>0.0.8</javafx-maven-plugin.version>
     <javafx-controls.version>21.0.2</javafx-controls.version>
+    <maven-compiler-plugin.version>3.10.1</maven-compiler-plugin.version>
   </properties>
 
   <dependencies>
@@ -45,6 +49,14 @@
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-surefire-plugin</artifactId>
         <version>${maven-surefire-plugin.version}</version>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-compiler-plugin</artifactId>
+        <version>${maven-compiler-plugin.version}</version>
+        <configuration>
+          <release>21</release>
+        </configuration>
       </plugin>
     </plugins>
   </build>
