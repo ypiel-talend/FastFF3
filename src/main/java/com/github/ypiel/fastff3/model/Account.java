@@ -1,13 +1,9 @@
 package com.github.ypiel.fastff3.model;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
+public class Account extends IdLabel {
 
-@Data
-@AllArgsConstructor
-public class Account {
-
-    private final String id;
-    private final String label;
+    public Account(String id, String label){
+        super(id, label);
+    }
 
 }
