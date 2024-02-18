@@ -7,21 +7,21 @@ import lombok.Data;
 
 @Data
 public class Transaction {
-    private SimpleObjectProperty<TransactionType> type;
-    private SimpleStringProperty fromAccount;
-    private SimpleStringProperty toAccount;
-    private SimpleDoubleProperty amount;
-    private SimpleStringProperty description;
-    private SimpleStringProperty category;
-    private SimpleStringProperty tags;
+    private TransactionType type;
+    private Account fromAccount;
+    private Account toAccount;
+    private Double amount;
+    private String description;
+    private String category;
+    private String tags;
 
-    public Transaction(TransactionType type, String fromAccount, String toAccount, double amount, String description, String category, String tags) {
-        this.type = new SimpleObjectProperty<>(type);
-        this.fromAccount = new SimpleStringProperty(fromAccount);
-        this.toAccount = new SimpleStringProperty(toAccount);
-        this.amount = new SimpleDoubleProperty(amount);
-        this.description = new SimpleStringProperty(description);
-        this.category = new SimpleStringProperty(category);
-        this.tags = new SimpleStringProperty(tags);
+    public Transaction(TransactionType type, Account fromAccount, Account toAccount, double amount, String description, String category, String tags) {
+        this.type = type;
+        this.fromAccount = fromAccount;
+        this.toAccount = toAccount;
+        this.amount = amount;
+        this.description = description;
+        this.category = category;
+        this.tags = tags;
     }
 }

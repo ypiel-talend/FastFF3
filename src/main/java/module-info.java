@@ -1,4 +1,4 @@
-module com.github.ypiel.fastff3.FastFF3 {
+module com.github.ypiel.fastff3 {
     requires javafx.controls;
     requires lombok;
 
