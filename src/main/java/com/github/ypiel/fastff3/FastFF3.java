@@ -2,6 +2,7 @@ package com.github.ypiel.fastff3;
 
 import com.github.ypiel.fastff3.fx.AccountStringConverter;
 import com.github.ypiel.fastff3.fx.CategoryStringConverter;
+import com.github.ypiel.fastff3.fx.LocalDateStringConverter;
 import com.github.ypiel.fastff3.fx.TagsStringConverter;
 import com.github.ypiel.fastff3.model.Account;
 import com.github.ypiel.fastff3.model.Category;
@@ -20,6 +21,8 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import javafx.util.converter.DoubleStringConverter;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -89,7 +92,12 @@ public class FastFF3 extends Application {
         TagsStringConverter tagsStringConverter = new TagsStringConverter();
         tagsColumn.setCellFactory(TextFieldTableCell.forTableColumn(tagsStringConverter));
 
-        tableView.getColumns().addAll(typeColumn, fromAccountColumn, toAccountColumn, amountColumn, descriptionColumn, categoryColumn, tagsColumn);
+        TableColumn<Transaction, LocalDate> dateColumn = new TableColumn<>("Date");
+        dateColumn.setCellValueFactory(new PropertyValueFactory<>("date"));
+        LocalDateStringConverter localDateStringConverter = new LocalDateStringConverter(DateTimeFormatter.ofPattern("dd/MM/yyyy"), DateTimeFormatter.ofPattern("ddMMyyyy"));
+        dateColumn.setCellFactory(TextFieldTableCell.forTableColumn(localDateStringConverter));
+
+        tableView.getColumns().addAll(typeColumn, fromAccountColumn, toAccountColumn, amountColumn, descriptionColumn, categoryColumn, tagsColumn, dateColumn);
         tableView.setItems(data);
         tableView.setEditable(true);
 
@@ -99,7 +107,8 @@ public class FastFF3 extends Application {
                 0.0,
                 "",
                 categories.get(0),
-                "");
+                "",
+                LocalDate.now());
         data.add(first);
 
         VBox root = new VBox(tableView);

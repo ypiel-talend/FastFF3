@@ -5,6 +5,7 @@ import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 import lombok.Data;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -21,7 +22,9 @@ public class Transaction {
     private Category category;
     private List<String> tags = new ArrayList<>();
 
-    public Transaction(TransactionType type, Account fromAccount, Account toAccount, double amount, String description, Category category, String tags) {
+    private LocalDate date;
+
+    public Transaction(TransactionType type, Account fromAccount, Account toAccount, double amount, String description, Category category, String tags, LocalDate date) {
         this.type = type;
         this.fromAccount = fromAccount;
         this.toAccount = toAccount;
@@ -29,6 +32,7 @@ public class Transaction {
         this.description = description;
         this.category = category;
         this.setTagsFromString(tags);
+        this.date = date;
     }
 
     private void setTagsFromString(String stags){
