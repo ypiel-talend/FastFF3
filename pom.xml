@@ -15,14 +15,37 @@
         <maven.compiler.target>21</maven.compiler.target>
         <!-- Dependencies version -->
         <junit-jupiter-engine.version>5.9.1</junit-jupiter-engine.version>
-        <maven-surefire-plugin.version>2.22.2</maven-surefire-plugin.version>
+        <maven-surefire-plugin.version>3.0.0</maven-surefire-plugin.version>
         <javafx-maven-plugin.version>0.0.8</javafx-maven-plugin.version>
         <javafx-controls.version>21.0.2</javafx-controls.version>
         <maven-compiler-plugin.version>3.10.1</maven-compiler-plugin.version>
         <lombok.version>1.18.30</lombok.version>
+        <json.version>20231013</json.version>
+        <gson.version>2.10</gson.version>
+        <log4j.version>2.20.0</log4j.version>
     </properties>
 
     <dependencies>
+        <dependency>
+            <groupId>com.google.code.gson</groupId>
+            <artifactId>gson</artifactId>
+            <version>${gson.version}</version> <!-- Use the latest version available -->
+        </dependency>
+        <dependency>
+            <groupId>org.json</groupId>
+            <artifactId>json</artifactId>
+            <version>${json.version}</version> <!-- Use the latest version available -->
+        </dependency>
+        <dependency>
+            <groupId>org.apache.logging.log4j</groupId>
+            <artifactId>log4j-core</artifactId>
+            <version>${log4j.version}</version> <!-- Utilisez la dernière version disponible -->
+        </dependency>
+        <dependency>
+            <groupId>org.apache.logging.log4j</groupId>
+            <artifactId>log4j-api</artifactId>
+            <version>${log4j.version}</version> <!-- Utilisez la dernière version disponible -->
+        </dependency>
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
