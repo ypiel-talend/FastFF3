@@ -122,11 +122,20 @@ public class FastFF3 extends Application {
                         nextColumn = tableView.getColumns().get(currentColumnIndex);
                     }
                 }
-
                 if (nextColumn != null) {
                     tableView.edit(currentRowIndex, nextColumn);
                 }
                 event.consume();
+            } else if (event.getCode() == KeyCode.ENTER) {
+                Transaction first = new Transaction(TransactionType.WITHDRAWAL,
+                        uiService.getAssetAccounts().get(0),
+                        uiService.getExpenseAccounts().get(0),
+                        0.0,
+                        "",
+                        uiService.getCategories().get(0),
+                        "",
+                        LocalDate.now());
+                data.add(first);
             }
         });
 
