@@ -1,13 +1,15 @@
-package com.github.ypiel.fastff3.ff3;
+package com.github.ypiel.fastff3.service;
 
 import com.github.ypiel.fastff3.model.Account;
+import com.github.ypiel.fastff3.model.Category;
 import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
-import lombok.Data;
 import lombok.SneakyThrows;
 import lombok.extern.log4j.Log4j2;
 import org.json.JSONObject;
+import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 import java.net.URI;
@@ -26,6 +28,7 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Log4j2
+@Service
 public class FF3Client {
 
     public final static String BASE_API = "http://192.168.0.30/api/v1";
@@ -34,13 +37,19 @@ public class FF3Client {
 
     static {
         try {
+
+            String ff3Key = System.getProperty("ff3.key.file", System.getenv("FF3_KEY_FILE"));
             KEY = Files.readString(
-                    Paths.get(System.getProperty("ff3.key.file"))
+                    Paths.get(ff3Key)
             ).trim();
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
     }
+
+    public FF3Client() {
+    }
+
 
     @SneakyThrows
     private String getAPIResult(String enppoint, HttpMethod verb, Map<String, String> headers,
@@ -138,6 +147,27 @@ public class FF3Client {
                         e.getAsJsonObject("attributes").getAsJsonPrimitive("name").getAsString()))
                 .collect(Collectors.toList());
         return accounts;
+    }
+
+    public List<Category> getCategories() {
+        String categoriesJson = getAPIResult("autocomplete/categories",
+                HttpMethod.GET,
+                Collections.emptyMap(),
+                Collections.emptyMap(),
+                Optional.empty());
+
+        JsonElement jsonElement = JsonParser.parseString(categoriesJson);
+        if (!jsonElement.isJsonArray()) {
+            log.error(categoriesJson);
+            return Collections.emptyList();
+        }
+        JsonArray categoriesArray = jsonElement.getAsJsonArray();
+        List<Category> categories = categoriesArray.asList().stream()
+                .map(e -> e.getAsJsonObject())
+                .map(e -> new Category(e.getAsJsonPrimitive("id").getAsString(),
+                        e.getAsJsonPrimitive("name").getAsString()))
+                .collect(Collectors.toList());
+        return categories;
     }
 
     public enum AccountType {

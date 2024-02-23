@@ -1,14 +1,12 @@
 package com.github.ypiel.fastff3.ff3;
 
 import com.github.ypiel.fastff3.model.Account;
+import com.github.ypiel.fastff3.service.FF3Client;
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 class FF3ClientTest {
 

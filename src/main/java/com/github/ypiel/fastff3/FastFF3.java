@@ -8,6 +8,8 @@ import com.github.ypiel.fastff3.model.Account;
 import com.github.ypiel.fastff3.model.Category;
 import com.github.ypiel.fastff3.model.Transaction;
 import com.github.ypiel.fastff3.model.TransactionType;
+import com.github.ypiel.fastff3.service.UIService;
+import com.github.ypiel.fastff3.spring.FastFF3Config;
 import javafx.application.Application;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -20,6 +22,8 @@ import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import javafx.util.converter.DoubleStringConverter;
+import org.springframework.context.annotation.AnnotationConfigApplicationContext;
+import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -27,31 +31,24 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+@Component
 public class FastFF3 extends Application {
 
-    private List<Account> assetAccounts = new ArrayList<>();
-    private List<Account> expenseAccounts = new ArrayList<>();
-    private List<Account> revenueAccounts = new ArrayList<>();
-    private List<Category> categories = new ArrayList<>();
-    private List<String> tags = new ArrayList<>();
+    private UIService uiService;
 
     private final ObservableList<Account> fromAccountObservableList = FXCollections.observableArrayList();
     private final ObservableList<Account> toAccountObservableList = FXCollections.observableArrayList();
     private final ObservableList<Category> categoryObservableList = FXCollections.observableArrayList();
 
     private void mock() {
-        Collections.addAll(assetAccounts, new Account("1", "CHEQUE"), new Account("2", "BLEU"));
-        Collections.addAll(expenseAccounts, new Account("3", "CHEQUE COMMUN"), new Account("4", "CAROLE"));
-        Collections.addAll(revenueAccounts, new Account("5", "PEA"));
-        Collections.addAll(categories, new Category("1", "MyCateg"), new Category("2", "Abonnements"));
-
-        fromAccountObservableList.addAll(assetAccounts);
-        toAccountObservableList.addAll(expenseAccounts);
-        categoryObservableList.addAll(categories);
+        fromAccountObservableList.addAll(uiService.getAssetAccounts());
+        toAccountObservableList.addAll(uiService.getExpenseAccounts());
+        categoryObservableList.addAll(uiService.getCategories());
     }
 
     @Override
     public void start(Stage stage) {
+        initSpring();
         mock();
 
         TableView<Transaction> tableView = new TableView<>();
@@ -102,11 +99,11 @@ public class FastFF3 extends Application {
         tableView.setEditable(true);
 
         Transaction first = new Transaction(TransactionType.WITHDRAWAL,
-                assetAccounts.get(0),
-                expenseAccounts.get(0),
+                uiService.getAssetAccounts().get(0),
+                uiService.getExpenseAccounts().get(0),
                 0.0,
                 "",
-                categories.get(0),
+                uiService.getCategories().get(0),
                 "",
                 LocalDate.now());
         data.add(first);
@@ -117,6 +114,11 @@ public class FastFF3 extends Application {
         stage.setScene(scene);
         stage.setTitle("Fast Firefly III");
         stage.show();
+    }
+
+    private void initSpring() {
+        AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext(FastFF3Config.class);
+        this.uiService = context.getBean(UIService.class);
     }
 
     public static void main(String[] args) {
