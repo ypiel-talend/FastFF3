@@ -19,6 +19,7 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.cell.ComboBoxTableCell;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
+import javafx.scene.input.KeyCode;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import javafx.util.converter.DoubleStringConverter;
@@ -97,6 +98,37 @@ public class FastFF3 extends Application {
         tableView.getColumns().addAll(typeColumn, fromAccountColumn, toAccountColumn, amountColumn, descriptionColumn, categoryColumn, tagsColumn, dateColumn);
         tableView.setItems(data);
         tableView.setEditable(true);
+
+        tableView.getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {
+            if (newSelection != null) {
+                int row = tableView.getSelectionModel().getSelectedIndex();
+                TableColumn<Transaction, ?> firstColumn = tableView.getColumns().get(0);
+                tableView.edit(row, firstColumn);
+            }
+        });
+
+        tableView.setOnKeyPressed(event -> {
+            if (event.getCode() == KeyCode.RIGHT || event.getCode() == KeyCode.LEFT || event.getCode() == KeyCode.TAB) {
+                int currentColumnIndex = tableView.getFocusModel().getFocusedCell().getColumn();
+                int currentRowIndex = tableView.getFocusModel().getFocusedCell().getRow();
+                TableColumn<Transaction, ?> nextColumn = null;
+
+                if (event.getCode() == KeyCode.RIGHT || event.getCode() == KeyCode.TAB) {
+                    if (currentColumnIndex < tableView.getColumns().size() - 1) {
+                        nextColumn = tableView.getColumns().get(currentColumnIndex + 1);
+                    }
+                } else if (event.getCode() == KeyCode.LEFT) {
+                    if (currentColumnIndex > 0) {
+                        nextColumn = tableView.getColumns().get(currentColumnIndex);
+                    }
+                }
+
+                if (nextColumn != null) {
+                    tableView.edit(currentRowIndex, nextColumn);
+                }
+                event.consume();
+            }
+        });
 
         Transaction first = new Transaction(TransactionType.WITHDRAWAL,
                 uiService.getAssetAccounts().get(0),
