@@ -28,8 +28,6 @@ import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 @Component
@@ -114,11 +112,11 @@ public class FastFF3 extends Application {
                 TableColumn<Transaction, ?> nextColumn = null;
 
                 if (event.getCode() == KeyCode.RIGHT || event.getCode() == KeyCode.TAB) {
-                    if (currentColumnIndex < tableView.getColumns().size() - 1) {
-                        nextColumn = tableView.getColumns().get(currentColumnIndex + 1);
+                    if (currentColumnIndex < tableView.getColumns().size()) {
+                        nextColumn = tableView.getColumns().get(currentColumnIndex);
                     }
                 } else if (event.getCode() == KeyCode.LEFT) {
-                    if (currentColumnIndex > 0) {
+                    if (currentColumnIndex >= 0) {
                         nextColumn = tableView.getColumns().get(currentColumnIndex);
                     }
                 }
@@ -126,7 +124,7 @@ public class FastFF3 extends Application {
                     tableView.edit(currentRowIndex, nextColumn);
                 }
                 event.consume();
-            } else if (event.getCode() == KeyCode.ENTER) {
+            } else if (event.getCode() == KeyCode.F1) {
                 Transaction first = new Transaction(TransactionType.WITHDRAWAL,
                         uiService.getAssetAccounts().get(0),
                         uiService.getExpenseAccounts().get(0),
